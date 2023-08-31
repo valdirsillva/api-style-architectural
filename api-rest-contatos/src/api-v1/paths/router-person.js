@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import personModel from '../models/person-model';
+import { validate } from 'jsonschema'
+import { personsSchema } from '../models/schemas'
 
 const personRouter = Router();
 
@@ -17,6 +19,16 @@ function listPersons(req, res, next) {
 }
 
 function insertPersons(req, res, next) {
+    // Validação do documento JSON recebido
+    const result = validate(req.body, personsSchema);
+
+    console.log(personsSchema)
+
+    if (result.errors.length > 0) {
+        res.status(400).send('Erro no formato do objeto JSON');
+        return;
+    }
+
     personModel.insert(req.body, (err, newObj) => {
         if (!err) {
             res.json(newObj)
