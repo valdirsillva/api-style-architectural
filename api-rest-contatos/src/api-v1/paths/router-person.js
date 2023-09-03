@@ -7,6 +7,7 @@ const personRouter = Router();
 
 personRouter.get('/', listPersons);
 personRouter.post('/', insertPersons);
+personRouter.put('/:id', updatePerson);
 
 function listPersons(req, res, next) {
     personModel.list({}, (err, list) => {
@@ -34,6 +35,19 @@ function insertPersons(req, res, next) {
             res.json(newObj)
         } else {
             res.status(400).send(err.message);
+        }
+    })
+}
+
+function updatePerson(req, res, next) {
+    const id = req.params.id
+    const personObj = req.body
+
+    personModel.update(id, personObj, (err, newObj) => {
+        if (!err) {
+            res.json(newObj)
+        } else {
+            res.status(400).send(err.message)
         }
     })
 }

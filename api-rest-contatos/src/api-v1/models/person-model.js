@@ -24,8 +24,8 @@ function list(params, callback) {
     db.personsDB.find({}, callback);
 }
 
-function update() {
-
+function update(id, obj, callback) {
+    db.personsDB.update({ _id: id }, { $set: { data: { ...obj } } }, callback);
 }
 
 function deleteItem() {
